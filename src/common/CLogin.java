@@ -3,6 +3,7 @@ package common;
 import dao.ManagerDao;
 import dao.UserDao;
 import view.ManagerFrm;
+import view.UserFrm;
 
 import javax.swing.*;
 import java.awt.*;
@@ -108,11 +109,15 @@ public class CLogin extends JFrame implements ActionListener {
             flag = UserDao.userValidate(accountno, accountpwd);
         }
 //        int flag = ManagerDao.accountValidate(accountno, accountpwd);
-        if (flag == 1) {//登录成功
+        if (flag == 1&&this.type==0) {//登录成功
             JOptionPane.showMessageDialog(this, "欢迎登录！");
             new ManagerFrm();
             dispose();
-        } else if (flag == 2) {
+        }else if(flag==1&&this.type==1) {
+            JOptionPane.showMessageDialog(this, "欢迎登录！");
+            new UserFrm();
+            dispose();
+        }else if (flag == 2) {
             txt_account.setText(null);
             txt_pwd.setText(null);
             JOptionPane.showMessageDialog(this, "密码错误！", "warning", JOptionPane.WARNING_MESSAGE);

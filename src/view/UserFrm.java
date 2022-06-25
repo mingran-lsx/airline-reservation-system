@@ -70,7 +70,7 @@ public class UserFrm extends JFrame implements ActionListener {
 
 	DefaultTableModel tModel_info, tModel_ticket, tModel_order;
 
-	UserFrm() {
+	public UserFrm() {
 		jp_info = new JPanel();
 		jp_ticket = new JPanel();
 		jp_order = new JPanel();
