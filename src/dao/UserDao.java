@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import entity.User;
 import entity.Userperson;
 import dbutil.SQLHelper;
-import utils.Fun;
+import utils.Format;
 public class UserDao {
 	// 用户登录
 	public static int userValidate(String usertel, String userpwd) {
@@ -50,7 +50,7 @@ public class UserDao {
 	public static int idtypenoQuery(String idtype) {
 		int idtypeno = 0;
 		String mysql = "select idtypeno from idtypeinfo where idtype='" + idtype + "'";
-		idtypeno = Fun.getIntByString(mysql);
+		idtypeno = Format.getIntByString(mysql);
 //		System.out.println(idtypeno);
 		return idtypeno;
 	}
@@ -67,7 +67,7 @@ public class UserDao {
 	public static int usertypenoQuery(String usertype) {
 		int usertypeno = 0;
 		String mysql = "select usertypeno from usertypeinfo where usertype='" + usertype + "'";
-		usertypeno = Fun.getIntByString(mysql);
+		usertypeno = Format.getIntByString(mysql);
 		return usertypeno;
 	}
 

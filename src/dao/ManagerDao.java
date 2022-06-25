@@ -6,9 +6,6 @@ import java.util.ArrayList;
 
 import dbutil.SQLHelper;
 import entity.Manager;
-import entity.Price;
-import entity.Train;
-import entity.User;
 
 public class ManagerDao {
     //Manager_Login

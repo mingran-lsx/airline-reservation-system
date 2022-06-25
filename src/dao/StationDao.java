@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import dbutil.SQLHelper;
 import entity.Price;
-import entity.Train;
 
 public class StationDao {
     // 获得站点all
@@ -30,8 +29,8 @@ public class StationDao {
                     station[i][0] = rs.getString(1);
                     station[i][1] = rs.getString(2);
                     station[i][2] = rs.getString(3);
-                    station[i][3] = TrainDao.timeChange(rs.getTimestamp(4));
-                    station[i][4] = TrainDao.timeChange(rs.getTimestamp(5));
+                    station[i][3] = PlaneDao.timeChange(rs.getTimestamp(4));
+                    station[i][4] = PlaneDao.timeChange(rs.getTimestamp(5));
                     station[i][5] = rs.getString(6);
                     i++;
                 }
@@ -60,7 +59,7 @@ public class StationDao {
     }
 
     // 查询航班、起点、站点名获得这三个及timestart timereach
-    public static Object[][] trainno_stationQuery(String trainno, String trainstart, String stationinfo) {
+    public static Object[][] planeno_stationQuery(String trainno, String trainstart, String stationinfo) {
         Object[][] station = null;
         String mysql, mysqlwhere;
 
@@ -181,11 +180,11 @@ public class StationDao {
                     ResultSet rs_station = SQLHelper.executeQuery(mysql_station);// 查询符合条件的站点
                     while (rs_station.next()) {
                         rows[i][0] = rs_station.getString(1);
-                        rows[i][1] = TrainDao.traintypeQuery(rs_trainno.getInt(2));
+                        rows[i][1] = PlaneDao.traintypeQuery(rs_trainno.getInt(2));
                         rows[i][2] = rs_trainno.getString(3);
                         rows[i][3] = rs_station.getString(2);
-                        rows[i][4] = TrainDao.timeChange(rs_station.getTimestamp(3));
-                        rows[i][5] = TrainDao.timeChange(rs_station.getTimestamp(4));
+                        rows[i][4] = PlaneDao.timeChange(rs_station.getTimestamp(3));
+                        rows[i][5] = PlaneDao.timeChange(rs_station.getTimestamp(4));
                         rows[i][6] = rs_station.getString(5);
 
                         ArrayList<Price> pr = PriceDao.priceQuery(rs_station.getString(1), rs_station.getString(2));

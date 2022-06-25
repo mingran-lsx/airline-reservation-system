@@ -9,9 +9,7 @@ import dao.ManagerDao;
 import dao.OrderDao;
 import dao.PriceDao;
 import dao.StationDao;
-import dao.TrainDao;
-import dao.UserDao;
-import entity.Order;
+import dao.PlaneDao;
 import entity.Price;
 
 import java.awt.*;
@@ -28,10 +26,10 @@ public class ManagerFrm extends JFrame implements ActionListener {
 
     //road
     JTable tbl_road;    // 路线表格
-    JLabel lbl_road_trainno, lbl_road_traintype, lbl_road_trainstart, lbl_road_trainend, lbl_road_timestart, lbl_road_timereach, lbl_road_timemove; // 路线信息标签
-    JTextField txt_road_trainno, txt_road_trainstart, txt_road_trainend, txt_road_timestart, txt_road_timereach, txt_road_timemove; // 路线信息文本框
-    JComboBox cmb_road_traintype;   // 路线信息下拉框
-    JButton btn_road_addtrain, btn_road_addstation, btn_road_revise, btn_road_confirm, btn_road_delete; // 路线信息按钮
+    JLabel lbl_road_planeno, lbl_road_planetype, lbl_road_planestart, lbl_road_planeend, lbl_road_timestart, lbl_road_timereach, lbl_road_timemove; // 路线信息标签
+    JTextField txt_road_planeno, txt_road_planestart, txt_road_planeend, txt_road_timestart, txt_road_timereach, txt_road_timemove; // 路线信息文本框
+    JComboBox cmb_road_planetype;   // 路线信息下拉框
+    JButton btn_road_addplane, btn_road_addstation, btn_road_revise, btn_road_confirm, btn_road_delete; // 路线信息按钮
     JPanel jp_road_detail, jp_road_btn; // 路线信息面板
     Object[] cols_road = {"航班", "类型", "起点站", "终到站", "出发时间", "到达时间", "运行时间"};    // 路线表格列名
     Object[][] rows_road;   // 路线表格行数据
@@ -39,8 +37,8 @@ public class ManagerFrm extends JFrame implements ActionListener {
     //price
     JTable tbl_price;
     JPanel jp_price_detail, jp_price_revise;
-    JLabel lbl_price_station1, lbl_price_station2, lbl_price_trainno;
-    JTextField txt_price_station1, txt_price_station2, txt_price_trainno;
+    JLabel lbl_price_station1, lbl_price_station2, lbl_price_planeno;
+    JTextField txt_price_station1, txt_price_station2, txt_price_planeno;
     JButton btn_price_search;
     JLabel lbl_price_high, lbl_price_one, lbl_price_two;
     JTextField txt_price_high, txt_price_one, txt_price_two;
@@ -50,8 +48,8 @@ public class ManagerFrm extends JFrame implements ActionListener {
 
     //station
     JTable tbl_station;
-    JLabel lbl_station_trainno, lbl_station_stationno, lbl_station_stationinfo, lbl_station_timereach, lbl_station_timestart, lbl_station_stationmile;
-    JTextField txt_station_trainno, txt_station_stationno, txt_station_stationinfo, txt_station_timereach, txt_station_timestart, txt_station_stationmile;
+    JLabel lbl_station_planeno, lbl_station_stationno, lbl_station_stationinfo, lbl_station_timereach, lbl_station_timestart, lbl_station_stationmile;
+    JTextField txt_station_planeno, txt_station_stationno, txt_station_stationinfo, txt_station_timereach, txt_station_timestart, txt_station_stationmile;
     JButton btn_station_add, btn_station_revise, btn_station_confirm, btn_station_delete;
     JPanel jp_station_detail, jp_station_btn;
     Object[] cols_station = {"航班", "站点序号", "站点信息", "到达时间", "起飞时间", "里程"};
@@ -65,7 +63,7 @@ public class ManagerFrm extends JFrame implements ActionListener {
     JTextField txt_discount_timestart;
     JButton btn_discount_search, btn_discount_open, btn_discount_cancel;
     JPanel jp_discount_operate;
-    Object[] cols_discount = {"航班", "类型", "起点站", "终到站", "出发时间", "到达时间", "经历时间","机票折扣","里程数","积分","头等舱余票","公务舱余票", "经济舱余票"};
+    Object[] cols_discount = {"航班", "类型", "起点站", "终到站", "出发时间", "到达时间", "经历时间","机票折扣","里程数","积分","头等舱余票","公务舱余票", "经济舱余票","折扣活动开放情况"};
     Object[][] rows_discount;
 
     //order
@@ -107,35 +105,35 @@ public class ManagerFrm extends JFrame implements ActionListener {
 
         //road
 
-        rows_road = TrainDao.traininfo();
+        rows_road = PlaneDao.planeinfo();
 
         tModel_road = new DefaultTableModel(rows_road, cols_road);
         tbl_road = new JTable(tModel_road);
 
-        lbl_road_trainno = new JLabel("        航班：");
-        lbl_road_traintype = new JLabel("        类型：");
-        lbl_road_trainstart = new JLabel("        起点站：");
-        lbl_road_trainend = new JLabel("        终到站：");
+        lbl_road_planeno = new JLabel("        航班：");
+        lbl_road_planetype = new JLabel("        类型：");
+        lbl_road_planestart = new JLabel("        起点站：");
+        lbl_road_planeend = new JLabel("        终到站：");
         lbl_road_timestart = new JLabel("        出发时间：");
         lbl_road_timereach = new JLabel("        到达时间：");
         lbl_road_timemove = new JLabel("        运行时间：");
 
-        txt_road_trainno = new JTextField(15);
-        txt_road_trainstart = new JTextField(20);
-        txt_road_trainend = new JTextField(20);
+        txt_road_planeno = new JTextField(15);
+        txt_road_planestart = new JTextField(20);
+        txt_road_planeend = new JTextField(20);
         txt_road_timestart = new JTextField(20);
         txt_road_timereach = new JTextField(20);
         txt_road_timemove = new JTextField(20);
 
-        cmb_road_traintype = new JComboBox();
-        cmb_road_traintype.addItem("A类飞机");
-        cmb_road_traintype.addItem("B类飞机");
-        cmb_road_traintype.addItem("C类飞机");
+        cmb_road_planetype = new JComboBox();
+        cmb_road_planetype.addItem("A类飞机");
+        cmb_road_planetype.addItem("B类飞机");
+        cmb_road_planetype.addItem("C类飞机");
 
         jp_road_detail = new JPanel();
         jp_road_btn = new JPanel();
 
-        btn_road_addtrain = new JButton("录入航班");
+        btn_road_addplane = new JButton("录入航班");
         btn_road_addstation = new JButton("录入站点");
         btn_road_revise = new JButton("修改路线");
         btn_road_confirm = new JButton("确认修改");
@@ -143,28 +141,28 @@ public class ManagerFrm extends JFrame implements ActionListener {
 
         btn_road_confirm.setEnabled(false);
 
-        btn_road_addtrain.addActionListener(this);
+        btn_road_addplane.addActionListener(this);
         btn_road_addstation.addActionListener(this);
         btn_road_revise.addActionListener(this);
         btn_road_confirm.addActionListener(this);
         btn_road_delete.addActionListener(this);
 
         jp_road_detail.setLayout(new GridLayout(2, 8));
-        jp_road_detail.add(lbl_road_trainno);
-        jp_road_detail.add(txt_road_trainno);
-        jp_road_detail.add(lbl_road_traintype);
-        jp_road_detail.add(cmb_road_traintype);
-        jp_road_detail.add(lbl_road_trainstart);
-        jp_road_detail.add(txt_road_trainstart);
-        jp_road_detail.add(lbl_road_trainend);
-        jp_road_detail.add(txt_road_trainend);
+        jp_road_detail.add(lbl_road_planeno);
+        jp_road_detail.add(txt_road_planeno);
+        jp_road_detail.add(lbl_road_planetype);
+        jp_road_detail.add(cmb_road_planetype);
+        jp_road_detail.add(lbl_road_planestart);
+        jp_road_detail.add(txt_road_planestart);
+        jp_road_detail.add(lbl_road_planeend);
+        jp_road_detail.add(txt_road_planeend);
         jp_road_detail.add(lbl_road_timestart);
         jp_road_detail.add(txt_road_timestart);
         jp_road_detail.add(lbl_road_timereach);
         jp_road_detail.add(txt_road_timereach);
         jp_road_detail.add(lbl_road_timemove);
         jp_road_detail.add(txt_road_timemove);
-        jp_road_detail.add(btn_road_addtrain);
+        jp_road_detail.add(btn_road_addplane);
         jp_road_detail.add(btn_road_addstation);
 
         jp_road_btn.setBorder(new TitledBorder("*修改路线：选中航班后点击“修改路线”，修改完毕点击“确认修改”（不可修改航班）"));
@@ -180,11 +178,11 @@ public class ManagerFrm extends JFrame implements ActionListener {
 
         //price
 
-        lbl_price_trainno = new JLabel("航班：");
+        lbl_price_planeno = new JLabel("航班：");
         lbl_price_station1 = new JLabel("起点站：");
         lbl_price_station2 = new JLabel("到站：");
 
-        txt_price_trainno = new JTextField(20);
+        txt_price_planeno = new JTextField(20);
         txt_price_station1 = new JTextField(20);
         txt_price_station2 = new JTextField(20);
 
@@ -193,8 +191,8 @@ public class ManagerFrm extends JFrame implements ActionListener {
         btn_price_search.addActionListener(this);
 
         jp_price_detail = new JPanel();
-        jp_price_detail.add(lbl_price_trainno);
-        jp_price_detail.add(txt_price_trainno);
+        jp_price_detail.add(lbl_price_planeno);
+        jp_price_detail.add(txt_price_planeno);
         jp_price_detail.add(lbl_price_station1);
         jp_price_detail.add(txt_price_station1);
         jp_price_detail.add(lbl_price_station2);
@@ -240,14 +238,14 @@ public class ManagerFrm extends JFrame implements ActionListener {
         tModel_station = new DefaultTableModel(rows_station, cols_station);
         tbl_station = new JTable(tModel_station);
 
-        lbl_station_trainno = new JLabel("        航班：");
+        lbl_station_planeno = new JLabel("        航班：");
         lbl_station_stationno = new JLabel("        站点序号：");
         lbl_station_stationinfo = new JLabel("        站点信息：");
         lbl_station_timereach = new JLabel("        到达时间：");
         lbl_station_timestart = new JLabel("        起飞时间：");
         lbl_station_stationmile = new JLabel("        里程：");
 
-        txt_station_trainno = new JTextField(10);
+        txt_station_planeno = new JTextField(10);
         txt_station_stationno = new JTextField(20);
         txt_station_stationinfo = new JTextField(20);
         txt_station_timereach = new JTextField(20);
@@ -270,8 +268,8 @@ public class ManagerFrm extends JFrame implements ActionListener {
         btn_station_delete.addActionListener(this);
 
         jp_station_detail.setLayout(new GridLayout(2, 8));
-        jp_station_detail.add(lbl_station_trainno);
-        jp_station_detail.add(txt_station_trainno);
+        jp_station_detail.add(lbl_station_planeno);
+        jp_station_detail.add(txt_station_planeno);
         jp_station_detail.add(lbl_station_stationno);
         jp_station_detail.add(txt_station_stationno);
         jp_station_detail.add(lbl_station_stationinfo);
@@ -305,8 +303,8 @@ public class ManagerFrm extends JFrame implements ActionListener {
         txt_discount_timestart = new JTextField(20);//
 
         btn_discount_search = new JButton("查找航班(起飞日期)");
-        btn_discount_open = new JButton("开放当日售票");
-        btn_discount_cancel = new JButton("停止当日售票");
+        btn_discount_open = new JButton("开放折扣活动");
+        btn_discount_cancel = new JButton("停止折扣活动");
 
         btn_discount_search.addActionListener(this);//.addActionListener(this); 是用来添加监听器的，而不是用来添加事件的，所以不能用addActionListener(this)
         btn_discount_open.addActionListener(this);
@@ -389,8 +387,8 @@ public class ManagerFrm extends JFrame implements ActionListener {
         p_all = new JTabbedPane(JTabbedPane.LEFT);
         p_all.add("路线管理", jp_road);
         p_all.add("票价管理", jp_price);
-        p_all.add("站点管理", jp_station);
-        p_all.add("优惠活动管理", jp_discount);
+        p_all.add("路线管理", jp_station);
+        p_all.add("机票销售,折扣,积分", jp_discount);
         p_all.add("订单查询", jp_order);
         p_all.add("密码修改", jp_pwd);
 
@@ -409,8 +407,8 @@ public class ManagerFrm extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource() == btn_road_addtrain) {
-            new Btn_Road_Addtrain();
+        if (e.getSource() == btn_road_addplane) {
+            new Btn_Road_Addplane();
         } else if (e.getSource() == btn_road_addstation) {
             new Btn_Road_Addstation();
         } else if (e.getSource() == btn_road_revise) {
@@ -446,17 +444,17 @@ public class ManagerFrm extends JFrame implements ActionListener {
         }
     }
 
-    class Btn_Road_Addtrain extends JFrame implements ActionListener {
-        JLabel lbl_no, lbl_typeno, lbl_trainstart, lbl_trainend, lbl_timestart, lbl_timereach, lbl_timemove, lbl_ticket;
-        JTextField txt_no, txt_typeno, txt_trainstart, txt_trainend, txt_timestart, txt_timereach, txt_timemove, txt_ticket;
+    class Btn_Road_Addplane extends JFrame implements ActionListener {
+        JLabel lbl_no, lbl_typeno, lbl_planestart, lbl_planeend, lbl_timestart, lbl_timereach, lbl_timemove, lbl_ticket;
+        JTextField txt_no, txt_typeno, txt_planestart, txt_planeend, txt_timestart, txt_timereach, txt_timemove, txt_ticket;
         JButton btn_confirm;
         JPanel jp_btn;
 
-        Btn_Road_Addtrain() {
+        Btn_Road_Addplane() {
             lbl_no = new JLabel("航班：");
             lbl_typeno = new JLabel("类型：（0:A类飞机 1:B类飞机 2:C类飞机）");
-            lbl_trainstart = new JLabel("起点站：");
-            lbl_trainend = new JLabel("终点站：");
+            lbl_planestart = new JLabel("起点站：");
+            lbl_planeend = new JLabel("终点站：");
             lbl_timestart = new JLabel("起飞时间：");
             lbl_timereach = new JLabel("到达时间：");
             lbl_timemove = new JLabel("运行时间：");
@@ -464,8 +462,8 @@ public class ManagerFrm extends JFrame implements ActionListener {
 
             txt_no = new JTextField(15);
             txt_typeno = new JTextField(10);
-            txt_trainstart = new JTextField(20);
-            txt_trainend = new JTextField(20);
+            txt_planestart = new JTextField(20);
+            txt_planeend = new JTextField(20);
             txt_timestart = new JTextField(20);
             txt_timereach = new JTextField(20);
             txt_timemove = new JTextField(20);
@@ -482,9 +480,9 @@ public class ManagerFrm extends JFrame implements ActionListener {
             box1.add(Box.createVerticalStrut(15));
             box1.add(lbl_typeno);
             box1.add(Box.createVerticalStrut(15));
-            box1.add(lbl_trainstart);
+            box1.add(lbl_planestart);
             box1.add(Box.createVerticalStrut(15));
-            box1.add(lbl_trainend);
+            box1.add(lbl_planeend);
             box1.add(Box.createVerticalStrut(15));
             box1.add(lbl_timestart);
             box1.add(Box.createVerticalStrut(15));
@@ -500,9 +498,9 @@ public class ManagerFrm extends JFrame implements ActionListener {
             box2.add(Box.createVerticalStrut(8));
             box2.add(txt_typeno);
             box2.add(Box.createVerticalStrut(8));
-            box2.add(txt_trainstart);
+            box2.add(txt_planestart);
             box2.add(Box.createVerticalStrut(8));
-            box2.add(txt_trainend);
+            box2.add(txt_planeend);
             box2.add(Box.createVerticalStrut(8));
             box2.add(txt_timestart);
             box2.add(Box.createVerticalStrut(8));
@@ -535,20 +533,20 @@ public class ManagerFrm extends JFrame implements ActionListener {
         }
 
         public void actionPerformed(ActionEvent e) {
-            String trainno = txt_no.getText().trim();
-            int traintypeno = Integer.parseInt(txt_typeno.getText().trim());
-            String trainstart = txt_trainstart.getText().trim();
-            String trainend = txt_trainend.getText().trim();
+            String planeno = txt_no.getText().trim();
+            int planetypeno = Integer.parseInt(txt_typeno.getText().trim());
+            String planestart = txt_planestart.getText().trim();
+            String planeend = txt_planeend.getText().trim();
             String timestart = txt_timestart.getText();
             String timereach = txt_timereach.getText();
             String timemove = txt_timemove.getText().trim();
             int ticket = Integer.parseInt(txt_ticket.getText().trim());
 
 
-            int k = TrainDao.trainInsert(trainno, traintypeno, trainstart, trainend, timestart, timereach, timemove, ticket);
+            int k = PlaneDao.planeInsert(planeno, planetypeno, planestart, planeend, timestart, timereach, timemove, ticket);
             if (k == 3) {
                 JOptionPane.showMessageDialog(null, "路线录入成功！");
-                rows_road = TrainDao.traininfo();
+                rows_road = PlaneDao.planeinfo();
 
                 tModel_road.setDataVector(rows_road, cols_road);
                 dispose();
@@ -652,7 +650,7 @@ public class ManagerFrm extends JFrame implements ActionListener {
         }
 
         public void actionPerformed(ActionEvent e) {
-            String trainno = txt_trano.getText().trim();
+            String planeno = txt_trano.getText().trim();
             String stationno = txt_stano.getText().trim();
             String stationinfo = txt_stainfo.getText().trim();
             String timereach = txt_timereach.getText();
@@ -663,7 +661,7 @@ public class ManagerFrm extends JFrame implements ActionListener {
             int two = Integer.parseInt(txt_two.getText().trim());
 
             int k = 0, k1 = 0, k2 = 0;
-            k1 = StationDao.stationInsert(trainno, stationno, stationinfo, timereach, timestart, stationmile);
+            k1 = StationDao.stationInsert(planeno, stationno, stationinfo, timereach, timestart, stationmile);
             k2 = PriceDao.priceInsert(stationno, high, one, two);
             k = k1 + k2;
 
@@ -682,39 +680,39 @@ public class ManagerFrm extends JFrame implements ActionListener {
         if (count == -1) {
             JOptionPane.showMessageDialog(this, "当前未选中航班", "Infomation", JOptionPane.WARNING_MESSAGE);
         } else {
-            txt_road_trainno.setText(tbl_road.getValueAt(count, 0).toString());
+            txt_road_planeno.setText(tbl_road.getValueAt(count, 0).toString());
             String type = tbl_road.getValueAt(count, 1).toString();
-            txt_road_trainstart.setText(tbl_road.getValueAt(count, 2).toString());
-            txt_road_trainend.setText(tbl_road.getValueAt(count, 3).toString());
+            txt_road_planestart.setText(tbl_road.getValueAt(count, 2).toString());
+            txt_road_planeend.setText(tbl_road.getValueAt(count, 3).toString());
             txt_road_timestart.setText(tbl_road.getValueAt(count, 4).toString());
             txt_road_timereach.setText(tbl_road.getValueAt(count, 5).toString());
             txt_road_timemove.setText(tbl_road.getValueAt(count, 6).toString());
 
-            cmb_road_traintype.setSelectedItem(type);
+            cmb_road_planetype.setSelectedItem(type);
 
-            txt_road_trainno.setEditable(false);
+            txt_road_planeno.setEditable(false);
             btn_road_confirm.setEnabled(true);
         }
     }
 
     public void Btn_Road_Confirm() {
-        String trainno = txt_road_trainno.getText().trim();
-        String traintype = cmb_road_traintype.getSelectedItem().toString();
-        String trainstart = txt_road_trainstart.getText();
-        String trainend = txt_road_trainend.getText().trim();
+        String planeno = txt_road_planeno.getText().trim();
+        String planetype = cmb_road_planetype.getSelectedItem().toString();
+        String planestart = txt_road_planestart.getText();
+        String planeend = txt_road_planeend.getText().trim();
         String timestart = txt_road_timestart.getText();
         String timereach = txt_road_timereach.getText();
         String timemove = txt_road_timemove.getText().trim();
 
-        int k = TrainDao.trainUpdate(trainno, traintype, trainstart, trainend, timestart, timereach, timemove);
+        int k = PlaneDao.planeUpdate(planeno, planetype, planestart, planeend, timestart, timereach, timemove);
         if (k == 1) {
             JOptionPane.showMessageDialog(this, "路线更新成功！");
 
-            cmb_road_traintype.setSelectedIndex(0);
-            txt_road_trainno.setEditable(false);
+            cmb_road_planetype.setSelectedIndex(0);
+            txt_road_planeno.setEditable(false);
             btn_road_confirm.setEnabled(true);
 
-            rows_road = TrainDao.traininfo();
+            rows_road = PlaneDao.planeinfo();
             tModel_road.setDataVector(rows_road, cols_road);
         }
     }
@@ -724,32 +722,32 @@ public class ManagerFrm extends JFrame implements ActionListener {
         if (count == -1) {
             JOptionPane.showMessageDialog(this, "当前未选中航班", "Infomation", JOptionPane.WARNING_MESSAGE);
         } else {
-            String trainno = tbl_road.getValueAt(count, 0).toString();
-            int k = TrainDao.trainDelete(trainno);
+            String planeno = tbl_road.getValueAt(count, 0).toString();
+            int k = PlaneDao.planeDelete(planeno);
             if (k == 2) {
                 JOptionPane.showMessageDialog(null, "删除成功！");
 
-                rows_road = TrainDao.traininfo();
+                rows_road = PlaneDao.planeinfo();
                 tModel_road.setDataVector(rows_road, cols_road);
             }
         }
     }
 
     public void Btn_Price_Search() {
-        String trainno = txt_price_trainno.getText().trim();
-        String trainstart = txt_price_station1.getText().trim();
+        String planeno = txt_price_planeno.getText().trim();
+        String planestart = txt_price_station1.getText().trim();
         String stationinfo = txt_price_station2.getText().trim();
-        if (trainno.equals("") || trainstart.equals("") || stationinfo.equals("")) {
+        if (planeno.equals("") || planestart.equals("") || stationinfo.equals("")) {
             JOptionPane.showMessageDialog(this, "航班、起点站、到站均不能为空！");
         } else {
-            rows_price = StationDao.trainno_stationQuery(trainno, trainstart, stationinfo);//-1
+            rows_price = StationDao.planeno_stationQuery(planeno, planestart, stationinfo);//-1
 
             if (rows_price == null) JOptionPane.showMessageDialog(this, "无符合条件航班！");
 
             else {
                 tModel_price.setDataVector(rows_price, cols_price);
 
-                ArrayList<Price> price = PriceDao.priceQuery(trainno, stationinfo);
+                ArrayList<Price> price = PriceDao.priceQuery(planeno, stationinfo);
                 txt_price_high.setText(String.valueOf(price.get(0).getPricehigh()));
                 txt_price_one.setText(String.valueOf(price.get(0).getPriceone()));
                 txt_price_two.setText(String.valueOf(price.get(0).getPricetwo()));
@@ -763,9 +761,9 @@ public class ManagerFrm extends JFrame implements ActionListener {
         int one = Integer.parseInt(txt_price_one.getText().trim());
         int two = Integer.parseInt(txt_price_two.getText().trim());
 
-        String trainno = txt_price_trainno.getText().trim();
+        String planeno = txt_price_planeno.getText().trim();
         String stationinfo = txt_price_station2.getText().trim();
-        String stationno = StationDao.stationnoQuery(trainno, stationinfo);
+        String stationno = StationDao.stationnoQuery(planeno, stationinfo);
 
         int k = PriceDao.priceUpdate(high, one, two, stationno);
         if (k == 1) {
@@ -782,21 +780,21 @@ public class ManagerFrm extends JFrame implements ActionListener {
         if (count == -1) {
             JOptionPane.showMessageDialog(this, "当前未选中站点", "Infomation", JOptionPane.WARNING_MESSAGE);
         } else {
-            txt_station_trainno.setText(tbl_station.getValueAt(count, 0).toString());
+            txt_station_planeno.setText(tbl_station.getValueAt(count, 0).toString());
             txt_station_stationno.setText(tbl_station.getValueAt(count, 1).toString());
             txt_station_stationinfo.setText(tbl_station.getValueAt(count, 2).toString());
             txt_station_timereach.setText(tbl_station.getValueAt(count, 3).toString());
             txt_station_timestart.setText(tbl_station.getValueAt(count, 4).toString());
             txt_station_stationmile.setText(tbl_station.getValueAt(count, 5).toString());
 
-            txt_station_trainno.setEditable(false);
+            txt_station_planeno.setEditable(false);
             txt_station_stationno.setEditable(false);
             btn_station_confirm.setEnabled(true);
         }
     }
 
     public void Btn_Station_Confirm() {
-        String trainno = txt_station_trainno.getText().trim();
+        String planeno = txt_station_planeno.getText().trim();
         String stationno = txt_station_stationno.getText().trim();
         String stationinfo = txt_station_stationinfo.getText().trim();
         String timereach = txt_station_timereach.getText();
@@ -806,7 +804,7 @@ public class ManagerFrm extends JFrame implements ActionListener {
         int k = StationDao.stationUpdate(stationno, stationinfo, timereach, timestart, stationmile);
         if (k == 1) {
             JOptionPane.showMessageDialog(this, "站点更新成功！");
-            txt_station_trainno.setEditable(true);
+            txt_station_planeno.setEditable(true);
             txt_station_stationno.setEditable(true);
             btn_station_confirm.setEnabled(false);
 
@@ -835,8 +833,8 @@ public class ManagerFrm extends JFrame implements ActionListener {
 
         String timestart = txt_discount_timestart.getText();//获取开始时间
 
-        rows_discount = TrainDao.train_ticketQuery(timestart);//查询符合条件的车次
-        System.out.println(Arrays.deepToString(rows_discount));
+        rows_discount = PlaneDao.plane_ticketQuery(timestart);//查询符合条件的车次
+//        System.out.println(Arrays.deepToString(rows_discount));
         if (rows_discount == null) {
             JOptionPane.showMessageDialog(null, "无符合当前条件的航班！");
         } else {
@@ -845,29 +843,29 @@ public class ManagerFrm extends JFrame implements ActionListener {
     }
 
     public void Btn_discount_Open() {
-        int confirm = JOptionPane.showConfirmDialog(this, "是否要开放当日售票？", "Question", JOptionPane.OK_CANCEL_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this, "是否要开放折扣活动？", "Question", JOptionPane.OK_CANCEL_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             String timestart = txt_discount_timestart.getText();
-            boolean k = TrainDao.train_ticketOnsale(timestart);
+            boolean k = PlaneDao.plane_ticketOnsale(timestart);
             if (k) {
-                JOptionPane.showMessageDialog(null, "当日售票开放成功！");
+                JOptionPane.showMessageDialog(null, "折扣活动开放成功！");
             }
-            rows_discount = TrainDao.train_ticketQuery(timestart);
+            rows_discount = PlaneDao.plane_ticketQuery(timestart);
             tModel_discount.setDataVector(rows_discount, cols_discount);
         }
     }
 
     public void Btn_discount_Cancel() {
-        int confirm = JOptionPane.showConfirmDialog(this, "是否要停止当日售票？", "Question", JOptionPane.OK_CANCEL_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this, "是否要停止折扣活动？", "Question", JOptionPane.OK_CANCEL_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             String timestart = txt_discount_timestart.getText();
-            int k = TrainDao.train_ticketStopsale(timestart);
+            int k = PlaneDao.plane_ticketStopsale(timestart);
             if (k == 0) {
-                JOptionPane.showMessageDialog(null, "有航班还未开放售票！", "Warning", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "航班还未开放折扣活动！", "Warning", JOptionPane.WARNING_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "已停止当日售票！");
+                JOptionPane.showMessageDialog(null, "已停止折扣活动！");
             }
-            rows_discount = TrainDao.train_ticketQuery(timestart);
+            rows_discount = PlaneDao.plane_ticketQuery(timestart);
             tModel_discount.setDataVector(rows_discount, cols_discount);
         }
     }

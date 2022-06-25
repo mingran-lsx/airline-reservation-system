@@ -2,7 +2,7 @@ package entity;
 
 import java.sql.Timestamp;
 
-public class Train {
+public class Plane {
 	String trainno;
 	int traintypeno;
 	String trainstart;

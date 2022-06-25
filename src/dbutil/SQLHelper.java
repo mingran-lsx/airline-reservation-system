@@ -63,22 +63,8 @@ public class SQLHelper {
 
         try {
             conn = DriverManager.getConnection(url, user, pwd);
-////		String sql="select idtypeno from idtypeinfo where idtype='中国居民身份证'";
-//		PreparedStatement pre=conn.prepareStatement(singleSql);
-//		rs=pre.executeQuery();
-//
-//		if (rs.next())
-//			r=rs.getObject(1);//getObject(1)是第一列
-//		conn.close();
-//	} catch(Exception ex) {
-//		ex.printStackTrace();
-//	}
-//	return r;
             //3.获取执行sql语句的对象
             stmt = conn.createStatement();    //创建Statement对象是干嘛的？    创建Statement对象是为了执行sql语句
-//        try {
-            //开启事务
-//            conn.setAutoCommit(false);
             //4.执行sql语句
             res = stmt.executeQuery(singleSql);
             //5.处理结果
@@ -86,18 +72,13 @@ public class SQLHelper {
 //                System.out.println(res.getObject(1).toString());//getObject(1)是从结果集中获取第一列的数据
                 handleResult = res.getObject(1).toString();//getObject(1)是第一列
             }
-            //提交事务
-//            conn.commit();
             res.close();    //关闭结果集
             stmt.close();   //关闭Statement对象
             conn.close();   //关闭Connection对象
         } catch (Exception e) {
-            //回滚事务
-//            conn.rollback();
             //事务的回滚是指程序或数据处理错误，将程序或数据恢复到上一次正确状态的行为
             e.printStackTrace();  //打印异常信息
         }
-//        assert res != null; //断言    如果res为空，则抛出异常   如果res不为空，则执行下面的代码
         return handleResult;
     }
 
@@ -112,37 +93,22 @@ public class SQLHelper {
 
     /* 执行select语句，返回结果集 */
     public static ResultSet executeQuery(String sql) {//sql语句   返回结果集
-//        ResultSet rs = null;
-//        try {
-
-//            rs = pre.executeQuery();
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//        return rs;
         PreparedStatement pstmt = null;
         ResultSet handleResult = null;
         //4.设置参数
-//        pstmt.setString(1, name);
         ResultSet res = null;
         try {
             conn = DriverManager.getConnection(url, user, pwd);
             pstmt = conn.prepareStatement(sql);
             //4.执行sql语句
-//            res = stmt.executeQuery(sql);
             res = pstmt.executeQuery();//执行查询操作
              handleResult = res;
-            //5.处理结果
-//            while (res.next()) {  //next()方法是否还有下一条数据
-////                System.out.println(res.getString("id") + " " + res.getString("name") + " " + res.getString("avatar"));
-//
-//            }
             //提交事务
 //            res.close();
 //            pstmt.close();
 //            conn.close();
+//            printResultSet(res);
         } catch (Exception e) {
-            //事务的回滚是指程序或数据处理错误，将程序或数据恢复到上一次正确状态的行为
             e.printStackTrace();  //打印异常信息
         }
         return handleResult;

@@ -1,7 +1,6 @@
 package dao;
 
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -116,7 +115,7 @@ public class OrderDao {
 				order[i][9] = orderList.get(i).getSeatno();
 				order[i][10] = orderList.get(i).getSeattype();
 				order[i][11] = orderList.get(i).getPrice();
-				order[i][12] = TrainDao.timeChange(orderList.get(i).getBuydate());
+				order[i][12] = PlaneDao.timeChange(orderList.get(i).getBuydate());
 				i++;
 			}
 			SQLHelper.closeConnection();
@@ -179,7 +178,7 @@ public class OrderDao {
 				order[i][9] = orderList.get(i).getSeatno();
 				order[i][10] = orderList.get(i).getSeattype();
 				order[i][11] = orderList.get(i).getPrice();
-				order[i][12] = TrainDao.timeChange(orderList.get(i).getBuydate());
+				order[i][12] = PlaneDao.timeChange(orderList.get(i).getBuydate());
 				i++;
 			}
 			SQLHelper.closeConnection();

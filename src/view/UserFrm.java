@@ -4,9 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.util.Objects;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -16,9 +14,7 @@ import common.CLogin;
 import dao.OrderDao;
 import dao.StationDao;
 import dao.TickettypeDao;
-import dao.TrainDao;
 import dao.UserDao;
-import entity.Order;
 
 //1.常用联系人信息管理 info 2.飞机票查询、飞机票购买 ticket 3.改签以及退票、订单查询 order 4.个人信息 per、修改密码 pwd
 

@@ -8,11 +8,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import dbutil.SQLHelper;
-import entity.Train;
+import entity.Plane;
 import types.TrainAndTicketType;
-import utils.Fun;
+import utils.Format;
 
-public class TrainDao {
+import static utils.Format.printResultSet;
+
+public class PlaneDao {
     // 转换时间格式
     public static String timeChange(Timestamp date) {
         String temp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
@@ -25,20 +27,21 @@ public class TrainDao {
         String mysql = "select airplanetype from airplanetypeinfo where airplanetypeno = " + traintypeno;
         airplanetype = (String) SQLHelper.executeSingleQuery(mysql);
         return airplanetype;
+
     }
 
     // 查找飞机类型序号
     public static int traintypenoQuery(String traintype) {
         int airplanetypeno = 0;
         String mysql = "select airplanetypeno from airplanetypeinfo where airplanetype='" + traintype + "'";
-        airplanetypeno = Fun.getIntByString(mysql);
+        airplanetypeno = Format.getIntByString(mysql);
         return airplanetypeno;
     }
 
     // 显示路线（路线管理）
-    public static Object[][] traininfo() {
+    public static Object[][] planeinfo() {
         Object[][] rows = null;
-        ArrayList<Train> trainList = new ArrayList<Train>();
+        ArrayList<Plane> planeList = new ArrayList<Plane>();
         String mysql;
 
         try {
@@ -54,7 +57,7 @@ public class TrainDao {
 
             rs.beforeFirst();
             while (rs.next()) {
-                Train tr = new Train();
+                Plane tr = new Plane();
                 tr.setTrainno(rs.getString(1));
                 tr.setTraintypeno(rs.getInt(2));
                 tr.setTrainstart(rs.getString(3));
@@ -62,17 +65,17 @@ public class TrainDao {
                 tr.setTimestart(rs.getTimestamp(5));
                 tr.setTimereach(rs.getTimestamp(6));
                 tr.setTimemove(rs.getString(7));
-                trainList.add(tr);
+                planeList.add(tr);
             }
 
             for (int i = 0; i < num; i++) {
-                rows[i][0] = trainList.get(i).getTrainno();
-                rows[i][1] = traintypeQuery(trainList.get(i).getTraintypeno());
-                rows[i][2] = trainList.get(i).getTrainstart();
-                rows[i][3] = trainList.get(i).getTrainend();
-                rows[i][4] = timeChange(trainList.get(i).getTimestart());
-                rows[i][5] = timeChange(trainList.get(i).getTimereach());
-                rows[i][6] = trainList.get(i).getTimemove();
+                rows[i][0] = planeList.get(i).getTrainno();
+                rows[i][1] = traintypeQuery(planeList.get(i).getTraintypeno());
+                rows[i][2] = planeList.get(i).getTrainstart();
+                rows[i][3] = planeList.get(i).getTrainend();
+                rows[i][4] = timeChange(planeList.get(i).getTimestart());
+                rows[i][5] = timeChange(planeList.get(i).getTimereach());
+                rows[i][6] = planeList.get(i).getTimemove();
             }
             SQLHelper.closeConnection();
         } catch (SQLException ee) {
@@ -82,7 +85,7 @@ public class TrainDao {
     }
 
     // 录入航班
-    public static int trainInsert(String trainno, int traintypeno, String trainstart, String trainend, String timestart, String timereach, String timemove, int ticket) {
+    public static int planeInsert(String trainno, int traintypeno, String trainstart, String trainend, String timestart, String timereach, String timemove, int ticket) {
         int k1 = 0, k2 = 0, k3 = 0;
         String mysql_train, mysql_ticket, mysql_sale;
         try {
@@ -102,7 +105,7 @@ public class TrainDao {
     }
 
     // 路线更新
-    public static int trainUpdate(String trainno, String traintype, String trainstart, String trainend, String timestart, String timereach, String timemove) {
+    public static int planeUpdate(String trainno, String traintype, String trainstart, String trainend, String timestart, String timereach, String timemove) {
         int traintypeno = traintypenoQuery(traintype);
 
         int k = 0;
@@ -118,7 +121,7 @@ public class TrainDao {
     }
 
     // 删除航班
-    public static int trainDelete(String trainno) {
+    public static int planeDelete(String trainno) {
         int k1 = 0, k2 = 0;
         String mysql, mysql_sale;
         try {
@@ -136,7 +139,7 @@ public class TrainDao {
     }
 
     // 查找日期获取航班基本信息 查找余票数量 并且查看在售状态
-    public static Object[][] train_ticketQuery(String timestart) {
+    public static Object[][] plane_ticketQuery(String timestart) {
         Object[][] rows = null;
         String mysql_train, mysql_ticket, mysql_sale;
         ArrayList<TrainAndTicketType> trainAndTicketTypeList = new ArrayList<TrainAndTicketType>();
@@ -167,7 +170,7 @@ public class TrainDao {
 //                    rows[i][8] = rs.getFloat(9);//积分
 //                    rows[i][9] = rs.getFloat(10);//
                     rows[i][7] = rs.getObject(8);
-                    rows[i][8] = rs.getObject(9);//积分
+                    rows[i][8] = rs.getObject(9);//
                     rows[i][9] = rs.getObject(10);//
                     mysql_ticket = "select tickethigh ,ticketone,tickettwo from tickettype where trainno='" + rs.getString(1) + "'";
                     ResultSet rs_ticket = SQLHelper.executeQuery(mysql_ticket);
@@ -175,13 +178,11 @@ public class TrainDao {
                     rows[i][10] = rs_ticket.getString(1);//商务座
                     rows[i][11] = rs_ticket.getString(2);//公务舱
                     rows[i][12] = rs_ticket.getString(3);//经济舱
-                    mysql_sale = "select saletypeno from sale where trainno='" + rs.getString(1) + "'";
+
+                    mysql_sale = "select is_discount from discount where trainno='" + rs.getString(1) + "'";
                     ResultSet rs_sale = SQLHelper.executeQuery(mysql_sale);
                     rs_sale.next();
-
-//                    rows[i][11] = saletypeQuery(rs_sale.getInt(1));
-
-
+                    rows[i][13] = saletypeQuery(rs_sale.getInt(1));
                     trainAndTicketTypeList.add(new TrainAndTicketType(rs.getString(1),
                             rs.getInt(2),
                             rs.getString(3),
@@ -194,7 +195,7 @@ public class TrainDao {
                             rs_ticket.getInt(1),
                             rs_ticket.getInt(2),
                             rs_ticket.getInt(3)
-                            ));
+                    ));
 
 //                    mysql_ticket = "select ticketno from ticket where trainno='" + rs.getString(1) + "'";
 //                    ResultSet rs_ticket = SQLHelper.executeQuery(mysql_ticket);
@@ -208,7 +209,7 @@ public class TrainDao {
 
                     i++;
                 }
-                System.out.println(trainAndTicketTypeList);
+//                System.out.println(trainAndTicketTypeList);
                 System.out.println(Arrays.deepToString(rows));
 
             }
@@ -220,15 +221,24 @@ public class TrainDao {
     }
 
     // 开放售票
-    public static boolean train_ticketOnsale(String timestart) {
+    public static boolean plane_ticketOnsale(String timestart) {
         String mysql_train, mysql_sale;
         int k = 0, num = 0;
 
         try {
-            mysql_train = "select trainno from train where timestart like '" + timestart + "%'";
+//            mysql_train = "select trainno from train where timestart like '" + timestart + "%'";
+            mysql_train = "SELECT\n" +
+                    "\tt.trainno,\n" +
+                    "\td.is_discount \n" +
+                    "FROM\n" +
+                    "\ttrain t\n" +
+                    "\tLEFT JOIN discount d ON t.trainno = d.trainno \n" +
+                    "WHERE\n" +
+                    "\tt.timestart like '" + timestart + "%'";
             ResultSet rs = SQLHelper.executeQuery(mysql_train);
             while (rs.next()) {
-                mysql_sale = "update sale set saletypeno=" + 1 + " where trainno='" + rs.getString(1) + "'";
+                printResultSet(rs);
+                mysql_sale = "update discount set is_discount=" + 1 + " where trainno='" + rs.getString(1) + "'";
                 k = k + SQLHelper.executeUpdate(mysql_sale);
                 num++;
             }
@@ -240,25 +250,25 @@ public class TrainDao {
     }
 
     // 停止售票
-    public static int train_ticketStopsale(String timestart) {
+    public static int plane_ticketStopsale(String timestart) {
         String mysql_train, mysql_temp, mysql_sale;
         int k = 0, num = 0, stop = 0;
 
         try {
-            mysql_train = "select trainno from train where timestart like '" + timestart + "%'";
+            mysql_train = "SELECT\n" +
+                    "\tt.trainno,\n" +
+                    "\td.is_discount \n" +
+                    "FROM\n" +
+                    "\ttrain t\n" +
+                    "\tLEFT JOIN discount d ON t.trainno = d.trainno \n" +
+                    "WHERE\n" +
+                    "\tt.timestart like '" + timestart + "%'";
             ResultSet rs = SQLHelper.executeQuery(mysql_train);
             while (rs.next()) {
-                mysql_temp = "select saletypeno from sale where trainno ='" + rs.getString(1) + "'";
-                ResultSet rs_temp = SQLHelper.executeQuery(mysql_temp);
-                while (rs_temp.next()) {
-                    if (rs_temp.getInt(1) == 0) {
-                        return stop;
-                    } else {
-                        mysql_sale = "update sale set saletypeno=" + 2 + " where trainno='" + rs.getString(1) + "'";
-                        k = k + SQLHelper.executeUpdate(mysql_sale);
-                        num++;
-                    }
-                }
+                printResultSet(rs);
+                mysql_sale = "update discount set is_discount=" + 0 + " where trainno='" + rs.getString(1) + "'";
+                k = k + SQLHelper.executeUpdate(mysql_sale);
+                num++;
             }
             SQLHelper.closeConnection();
         } catch (SQLException ee) {
@@ -270,18 +280,16 @@ public class TrainDao {
         return stop;
     }
 
-    // saletypeno转换
-    public static String saletypeQuery(int saletypeno) {
-        String mysql = "select saletype from saletypeinfo where saletypeno=" + saletypeno;
-        String saletype = (String) SQLHelper.executeSingleQuery(mysql);
-        return saletype;
+    // discount_info转换
+    public static String saletypeQuery(int disNo) {
+        String mysql = "select info from discount_info where number=" + disNo;
+        return (String) SQLHelper.executeSingleQuery(mysql);
     }
 
-    // saletype转换
+    // discount_info转换
     public static int saletypenoQuery(String saletype) {
         String mysql = "select saletypeno from saletypeinfo where saletype='" + saletype + "'";
-        int saletypeno = Fun.getIntByString(mysql);
-        return saletypeno;
+        return Format.getIntByString(mysql);
     }
 
 }

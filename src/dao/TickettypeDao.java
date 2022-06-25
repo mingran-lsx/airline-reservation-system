@@ -2,7 +2,7 @@ package dao;
 
 import dbutil.SQLHelper;
 
-import static utils.Fun.getIntByString;
+import static utils.Format.getIntByString;
 
 public class TickettypeDao {
 	//String转int的方法
