@@ -11,7 +11,7 @@ public class SeatDao {
 		String mysql;
 		try {
 			//
-			mysql="select seattrain,seatno,seattype from seat where ( seattype='头等舱' )  and seattrain like '"+trainno+"%' and seattype= 0";//
+			mysql="select seattrain,seatno,seattype from seat where ( seattype='头等舱' )  and seattrain like '"+"%"+trainno+"%' and seattype= 0";//
 			ResultSet rs=SQLHelper.executeQuery(mysql);
 			
 			int num=0;
@@ -38,7 +38,7 @@ public class SeatDao {
 		Object[][] seat=null;
 		String mysql;
 		try {
-			mysql="select seattrain,seatno,seattype from seat where ( seattype='公务舱'  )  and seattrain like '"+trainno+"%' and seattype= 0";
+			mysql="select seattrain,seatno,seattype from seat where ( seattype='公务舱'  )  and seattrain like '"+"%"+trainno+"%' and seattype= 0";
 			ResultSet rs=SQLHelper.executeQuery(mysql);
 			int num=0;
 			while(rs.next()) {
@@ -62,7 +62,7 @@ public class SeatDao {
 		Object[][] seat=null;
 		String mysql;
 		try {
-			mysql="select seattrain,seatno,seattype from seat where ( seattype='经济舱')  and seattrain like '"+trainno+"%' and seattype= 0";
+			mysql="select seattrain,seatno,seattype from seat where ( seattype='经济舱')  and seattrain like '"+"%"+trainno+"%' and seattype= 0";
 			ResultSet rs=SQLHelper.executeQuery(mysql);
 			int num=0;
 			while(rs.next()) {

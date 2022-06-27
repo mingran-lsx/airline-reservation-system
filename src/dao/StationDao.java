@@ -151,7 +151,7 @@ public class StationDao {
 //        System.out.println(trainstart + " " + trainend + " " + time + " " + type);
         try {
             mysql_trainno = "select trainno,traintypeno,trainstart from train where traintypeno >= " + type
-                    + " and trainstart like '" + trainstart + "%' and timestart like '" + time
+                    + " and trainstart like '"+"%" + trainstart + "%' and timestart like '"+"%" + time
                     + "%' order by timestart asc";
             ResultSet rs_trainno = SQLHelper.executeQuery(mysql_trainno);
 //            System.out.println(mysql_trainno+"resultset");
@@ -159,8 +159,8 @@ public class StationDao {
             while (rs_trainno.next()) {//遍历符合条件的航班
                 System.out.println(rs_trainno.getObject(1)+ "StationDao.java 161");
                 mysql_station = "select trainno,stationinfo,timestart,timereach,stationmile from station where trainno='"
-                        + rs_trainno.getString(1) + "' and stationinfo like '" + trainend + "%' and timestart like '"
-                        + time + "%' order by timestart asc";
+                        + rs_trainno.getString(1) + "' and stationinfo like '"+"%"+ trainend + "%' and timestart like '"
+                        +"%"+ time + "%' order by timestart asc";
 //                System.out.println(mysql_station);
                 ResultSet rs_station = SQLHelper.executeQuery(mysql_station);//查询符合条件的站点
 
@@ -175,8 +175,8 @@ public class StationDao {
                 int i = 0; // 记录行数
                 while (rs_trainno.next()) {
                     mysql_station = "select trainno,stationinfo,timestart,timereach,stationmile from station where trainno='"
-                            + rs_trainno.getString(1) + "' and stationinfo like '" + trainend
-                            + "%' and timestart like '" + time + "%' order by timestart asc";
+                            + rs_trainno.getString(1) + "' and stationinfo like '"+"%" + trainend
+                            + "%' and timestart like '"+"%" + time + "%' order by timestart asc";
                     ResultSet rs_station = SQLHelper.executeQuery(mysql_station);// 查询符合条件的站点
                     while (rs_station.next()) {
                         rows[i][0] = rs_station.getString(1);

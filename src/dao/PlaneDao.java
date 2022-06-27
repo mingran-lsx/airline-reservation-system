@@ -145,7 +145,7 @@ public class PlaneDao {
         ArrayList<TrainAndTicketType> trainAndTicketTypeList = new ArrayList<TrainAndTicketType>();
 
         try {
-            mysql_train = "select * from train where timestart like '" + timestart + "%'";
+            mysql_train = "select * from train where timestart like '" +"%"+ timestart + "%'";
 //			mysql_ticket = "select * from train, tickettype where train.trainno = tickettype.trainno and train.trainno = 'G102';";
             ResultSet rs = SQLHelper.executeQuery(mysql_train);
 
@@ -234,7 +234,7 @@ public class PlaneDao {
                     "\ttrain t\n" +
                     "\tLEFT JOIN discount d ON t.trainno = d.trainno \n" +
                     "WHERE\n" +
-                    "\tt.timestart like '" + timestart + "%'";
+                    "\tt.timestart like '"+"%" + timestart + "%'";
             ResultSet rs = SQLHelper.executeQuery(mysql_train);
             while (rs.next()) {
                 printResultSet(rs);
@@ -262,7 +262,7 @@ public class PlaneDao {
                     "\ttrain t\n" +
                     "\tLEFT JOIN discount d ON t.trainno = d.trainno \n" +
                     "WHERE\n" +
-                    "\tt.timestart like '" + timestart + "%'";
+                    "\tt.timestart like '" +"%"+ timestart + "%'";
             ResultSet rs = SQLHelper.executeQuery(mysql_train);
             while (rs.next()) {
                 printResultSet(rs);
